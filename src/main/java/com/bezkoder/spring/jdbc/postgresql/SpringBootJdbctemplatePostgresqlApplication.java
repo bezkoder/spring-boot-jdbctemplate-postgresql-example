@@ -9,5 +9,4 @@ public class SpringBootJdbctemplatePostgresqlApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringBootJdbctemplatePostgresqlApplication.class, args);
 	}
-
 }
