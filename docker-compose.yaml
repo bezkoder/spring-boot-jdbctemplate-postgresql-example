@@ -1,0 +1,50 @@
+#docker compose -f docker-compose.yaml up
+version: '3'
+services:
+
+  db:
+    image: "postgres:14"
+    container_name: testdb
+    environment:
+      - POSTGRES_DB=testdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    restart: always
+    stdin_open: true
+    tty: true
+    ports:
+      - 8087:5432
+    volumes:
+      - data:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+#   web:
+#     image: "tomcat:9-jdk11-openjdk-slim-bullseye"
+#     container_name: geomark-web
+#     environment:
+#       - JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+# #      - CATALINA_OPTS="-Xmx3500m -Xms3500m -Xss2m"
+#     ports:
+#       - 8098:8080
+#       - 5005:5005
+#     depends_on:
+#       - db
+#     links:
+#       - db
+#     deploy:
+#       resources:
+#         limits:
+#           cpus: '2'
+#           memory: 4G
+#     volumes:
+#       - "./target/pub#geomark.war:/usr/local/tomcat/webapps/pub#geomark.war"
+#       - ./logs:/usr/local/tomcat/logs
+
+volumes:
+  data:
